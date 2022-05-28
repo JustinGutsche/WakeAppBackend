@@ -4,7 +4,7 @@ var router = express.Router();
 const axios = require('axios').default;
 
 /**
- * GET suche Adresse
+ * Komplette GET Abfrage bezüglich einer VBB Verbindung von Punkt A nach Punkt B.
  */
 
 router.post('/', function(req, res, next) {
@@ -48,44 +48,29 @@ router.post('/', function(req, res, next) {
                 "lat": responseFrom[0].lat,
                 "long": responseFrom[0].lon,
                 "address": from_street
-            }
+            };
 
             const toJSON = {
                 "lat": responseTo[0].lat,
                 "long": responseTo[0].lon,
                 "address": to_street
-            }
+            };
     
             getBVGData(fromJSON, toJSON)
                 .then(response => {
                     res.json(response)
-                })
-
-            //res.send(responseTo[0].lat)    
+                });
         }))
     } 
 });
 
 function getBVGData(from, to) {
-    console.log("Triggered BVG Data")
 
     try {
         return axios.get(`https://v5.bvg.transport.rest/journeys?from.latitude=${from.lat}&from.longitude=${from.long}&from.address=${from.address}&to.latitude=${to.lat}&to.longitude=${to.long}&to.address=${to.address}`, {
-    }).then(response => response.data)
+        }).then(response => response.data)
     } catch (error) {return error};
     
 }
-
-router.post('/test', function(req, res, next) {
-    const user_id = req.body.user_id;
-    const token = req.body.token;
-    const geo = req.body.geo;
-
-    console.log("Found Body", req.body[0]['from.latitude'])
-
-    //res.send(json)
-    res.json(req.body);
-});
-
 
 module.exports = router;
