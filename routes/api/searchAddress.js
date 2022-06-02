@@ -58,7 +58,36 @@ router.post('/', function(req, res, next) {
     
             getBVGData(fromJSON, toJSON)
                 .then(response => {
-                    res.json(response)
+                    var tripTimeInSeconds = 0;
+                    // Stackoverflow Help: https://stackoverflow.com/questions/2024198/how-do-i-calculate-how-many-seconds-between-two-dates
+                    var tripStops = response['journeys'][0]['legs']
+                    tripStops.forEach(element => {
+                        var departureTime = new Date(element.departure)
+                        var arrivalTime = new Date(element.arrival)
+                        var diffTime = arrivalTime.getTime() - departureTime.getTime()
+
+                        var Seconds_from_dep_to_arr = diffTime / 1000;
+                        var Seconds_Between_Times = (Math.abs(Seconds_from_dep_to_arr) + element.departureDelay + element.arrivalDelay);
+                        tripTimeInSeconds += Seconds_Between_Times
+
+                    });
+
+                    //found: https://www.codegrepper.com/code-examples/javascript/convert+seconds+to+hours+minutes+seconds+javascript
+                    var hours = Math.floor(tripTimeInSeconds / 3600);
+                    var minutes = Math.floor((tripTimeInSeconds - (hours * 3600)) / 60);
+                    var seconds = tripTimeInSeconds - (hours * 3600) - (minutes * 60);
+
+                    if (hours   < 10) {hours   = "0"+hours;}
+                    if (minutes < 10) {minutes = "0"+minutes;}
+                    if (seconds < 10) {seconds = "0"+seconds;}
+
+                    const endTime = {
+                        "hours": hours,
+                        "minutes": minutes,
+                        "seconds": seconds
+                    }
+                    console.log(endTime);
+                    res.json(endTime)
                 });
         }))
     } 
