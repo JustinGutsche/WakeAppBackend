@@ -67,7 +67,7 @@ router.post('/', function(req, res, next) {
 function getBVGData(from, to) {
 
     try {
-        return axios.get(`https://v5.bvg.transport.rest/journeys?from.latitude=${from.lat}&from.longitude=${from.long}&from.address=${from.address}&to.latitude=${to.lat}&to.longitude=${to.long}&to.address=${to.address}`, {
+        return axios.get(`https://v5.bvg.transport.rest/journeys?from.latitude=${from.lat}&from.longitude=${from.long}&from.address=${from.address}&to.latitude=${to.lat}&to.longitude=${to.long}&to.address=${to.address}&results=0&startWithWalking=false`, {
         }).then(response => response.data)
     } catch (error) {return error};
     
