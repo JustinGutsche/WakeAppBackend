@@ -82,9 +82,9 @@ router.post('/', function(req, res, next) {
                     if (seconds < 10) {seconds = "0"+seconds;}
 
                     const endTime = {
-                        "hours": hours,
-                        "minutes": minutes,
-                        "seconds": seconds
+                        "hours": hours.toString(),
+                        "minutes": minutes.toString(),
+                        "seconds": seconds.toString()
                     }
                     console.log(endTime);
                     res.json(endTime)
